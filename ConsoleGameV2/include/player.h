@@ -13,7 +13,6 @@ class Player
     
     void updateDirection(Direction p_dir);
     void updatePosition();
-
     void updateDisplayChar();
 
     char chars[4] = { '^','v', '<', '>' };
@@ -24,9 +23,9 @@ class Player
 public:
     Player(int p_x, int p_y, int max_x, int max_y);
     void update(int* input);
-    char getDisplayChar();
-    int getX();
-    int getY();
+    char getDisplayChar() { return displayChar; };
+    int getX() { return x; };
+    int getY() { return y; };
 
 };
 

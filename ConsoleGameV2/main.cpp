@@ -5,10 +5,7 @@
 
 void getInput(int* input)
 {
-    while (true)
-    {
-        *input = _getch();
-    }   
+    while (true) { *input = _getch(); }
 }
 
 uint64_t getTime()

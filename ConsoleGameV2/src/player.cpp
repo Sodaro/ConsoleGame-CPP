@@ -23,20 +23,11 @@ void Player::update(int* input)
     Direction newDir = Direction::NONE;
     switch (*input)
     {
-    case KEY_UP:
-        newDir = Direction::UP;
-        break;
-    case KEY_DOWN:
-        newDir = Direction::DOWN;
-        break;
-    case KEY_LEFT:
-        newDir = Direction::LEFT;
-        break;
-    case KEY_RIGHT:
-        newDir = Direction::RIGHT;
-        break;
-    default:
-        break;
+        case KEY_UP: newDir = Direction::UP; break;
+        case KEY_DOWN: newDir = Direction::DOWN; break;
+        case KEY_LEFT: newDir = Direction::LEFT; break;
+        case KEY_RIGHT: newDir = Direction::RIGHT;break;
+        default:break;
     }
     updateDirection(newDir);
     updatePosition();
@@ -55,20 +46,11 @@ void Player::updatePosition()
 {
     switch (dir)
     {
-    case Direction::UP:
-        y--;
-        break;
-    case Direction::DOWN:
-        y++;
-        break;
-    case Direction::LEFT:
-        x--;
-        break;
-    case Direction::RIGHT:
-        x++;
-        break;
-    default:
-        break;
+        case Direction::UP: y--; break;
+        case Direction::DOWN: y++; break;
+        case Direction::LEFT: x--; break;
+        case Direction::RIGHT: x++; break;
+        default: break;
     }
     Wrap(y, 0, max_y);
     Wrap(x, 0, max_x);
@@ -78,7 +60,3 @@ void Player::updateDisplayChar()
 {
     displayChar = chars[(int)dir];
 }
-
-char Player::getDisplayChar(){ return displayChar; };
-int Player::getX() { return x; }
-int Player::getY() { return y; }
