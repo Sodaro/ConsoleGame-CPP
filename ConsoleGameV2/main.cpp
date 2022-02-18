@@ -14,7 +14,7 @@ const int HEIGHT = 10;
 #define KEY_RIGHT 77
 
 
-enum Direction { UP,DOWN,LEFT,RIGHT, NONE };
+enum class Direction { UP,DOWN,LEFT,RIGHT, NONE };
 
 
 void Wrap(int& value, int min, int max)
@@ -39,7 +39,7 @@ struct Wave
     char chars[4] = { '^','v', '<', '>' };
     void updateDisplayChar()
     {
-        displayChar = chars[dir];
+        displayChar = chars[(int)dir];
     }
 
     WORD color;
@@ -60,25 +60,23 @@ struct Wave
     {
         switch (dir)
         {
-        case UP:
-            y--;
-            Wrap(y, 0, HEIGHT - 1);
-            break;
-        case DOWN:
-            y++;
-            Wrap(y, 0, HEIGHT - 1);
-            break;
-        case LEFT:
-            x--;
-            Wrap(x, 0, LENGTH - 1);
-            break;
-        case RIGHT:
-            x++;
-            Wrap(x, 0, LENGTH - 1);
-            break;
-        default:
-            break;
+            case Direction::UP:
+                y--;
+                break;
+            case Direction::DOWN:
+                y++;
+                break;
+            case Direction::LEFT:
+                x--;
+                break;
+            case Direction::RIGHT:
+                x++;
+                break;
+            default:
+                break;
         }
+        Wrap(y, 0, HEIGHT - 1);
+        Wrap(x, 0, LENGTH - 1);
     }
 };
 
@@ -104,7 +102,6 @@ void hideCursor(HANDLE& handle)
 
 void getInput(int* input)
 {
-    //Direction dir = Direction::DOWN;
     while (true)
     {
         *input = _getch();
@@ -129,9 +126,9 @@ class Game
 
 
 
-    WORD colors[6] = {
-        Color::RED, Color::YELLOW, Color::LGREEN,
-        Color::GREEN, Color::BLUE, Color::MAGENTA
+    WORD colors[4] = {
+        Color::MAGENTA, Color::LMAGENTA, Color::LBLUE,
+        Color::BLUE
     };
 
 
@@ -140,6 +137,8 @@ class Game
     int colorIndex{ 0 };
     Wave* player;
     int* input;
+
+    int renderTicks = 0;
 
 public:
     Game(HANDLE& p_handle, int* p_input)
@@ -186,6 +185,9 @@ public:
 
     void render()
     {
+        ClearScreen();
+
+        //write the output
         for (int i = 0; i < HEIGHT; i++)
         {
             for (int j = 0; j < LENGTH; j++)
@@ -195,16 +197,21 @@ public:
             std::cout << std::endl;
         }
 
-        ClearScreen();
-        colorIndex++;
-        colorIndex %= 6;
-        SetConsoleTextAttribute(handle, colors[colorIndex]);
+        
+        //update color
+        renderTicks++;
+        if (renderTicks % 4 == 0)
+        {
+            colorIndex++;
+            colorIndex %= 4;
+            SetConsoleTextAttribute(handle, colors[colorIndex]);
+        }
+        
     }
 };
 
 int main()
 {
-
     uint64_t start;
     uint64_t currentTime;
 
