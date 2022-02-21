@@ -32,6 +32,8 @@ int main()
     while (true)
     {
         currentTime = getTime();
+
+        //framerate, 128ms delay (16 would be 60fps but color and player speed is tied to framerate)
         if (currentTime - start < 128.f)
         {
             continue;

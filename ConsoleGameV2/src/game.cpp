@@ -46,6 +46,8 @@ void Game::update()
         oldX = player->x;
         oldY = player->y;
     }
+
+    //clear the tail's previous position
     usedPositions[oldY * LENGTH + oldX] = false;
     consoleOutput[oldY * LENGTH + oldX] = '.';
     
@@ -54,6 +56,9 @@ void Game::update()
     newY = player->y;
 
     int index = newY * LENGTH + newX;
+
+
+    //check for collision with self
     for (int i = 0; i < sizeof(usedPositions) / sizeof(bool); i++)
     {
         if (usedPositions[i] == false)
@@ -66,6 +71,7 @@ void Game::update()
         }
     }
 
+    //update the player head char based on movement direction
     consoleOutput[index] = player->getDisplayChar();
     usedPositions[index] = true;
 

@@ -74,6 +74,7 @@ void Player::updateDisplayChar()
 
 void Player::addSnakePart()
 {
+    //linked list addind of parts
     if (head == nullptr && last == nullptr)
     {
         head = new Snake(prev_x, prev_y);
