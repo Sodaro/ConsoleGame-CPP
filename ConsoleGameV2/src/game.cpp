@@ -38,20 +38,20 @@ void Game::update()
     
     if (last != nullptr)
     {
-        oldX = last->getX();
-        oldY = last->getY();
+        oldX = last->x;
+        oldY = last->y;
     }
     else
     {
-        oldX = player->getX();
-        oldY = player->getY();
+        oldX = player->x;
+        oldY = player->y;
     }
     usedPositions[oldY * LENGTH + oldX] = false;
     consoleOutput[oldY * LENGTH + oldX] = '.';
     
     player->update(input);
-    newX = player->getX();
-    newY = player->getY();
+    newX = player->x;
+    newY = player->y;
 
     int index = newY * LENGTH + newX;
     for (int i = 0; i < sizeof(usedPositions) / sizeof(bool); i++)
@@ -76,8 +76,8 @@ void Game::update()
         Snake* part = head;
         while (part != nullptr)
         {
-            newX = part->getX();
-            newY = part->getY();
+            newX = part->x;
+            newY = part->y;
             usedPositions[newY * LENGTH + newX] = true;
             consoleOutput[newY * LENGTH + newX] = 'o';
             part = part->getNext();

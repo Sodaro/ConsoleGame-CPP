@@ -29,7 +29,5 @@ public:
     void update(int* input);
     void addSnakePart();
     char getDisplayChar() { return displayChar; };
-    int getX() { return x; };
-    int getY() { return y; };
 };
 

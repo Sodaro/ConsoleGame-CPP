@@ -35,9 +35,3 @@ void Snake::setPosition(int x, int y)
     this->x = x;
     this->y = y;
 }
-
-void Snake::getPrevPosition(int& x, int& y)
-{
-    x = prev_x;
-    y = prev_y;
-}

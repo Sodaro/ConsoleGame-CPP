@@ -10,7 +10,4 @@ public:
     void setNext(Snake* next);
     Snake* getNext(){ return next; };
     void setPosition(int x, int y);
-    void getPrevPosition(int& x, int& y);
-    int getX() { return x; };
-    int getY() { return y; };
 };
