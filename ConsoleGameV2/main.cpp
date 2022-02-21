@@ -17,16 +17,12 @@ uint64_t getTime()
 
 int main()
 {
-    uint64_t start;
-    uint64_t currentTime;
+    uint64_t start, currentTime;
 
     HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-
-    //hide the console-caret
-    hideCursor(handle);
     int input = 0;
 
-    auto game = new Game(handle, &input);
+    Game* game = new Game(handle, &input);
 
     //use separate thread for non-blocking input
     std::thread inputThread(getInput, &input);

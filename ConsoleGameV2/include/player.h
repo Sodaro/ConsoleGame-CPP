@@ -1,4 +1,5 @@
 #pragma once
+#include <snake.h>
 
 #define KEY_UP 72
 #define KEY_DOWN 80
@@ -16,16 +17,19 @@ class Player
     void updateDisplayChar();
 
     char chars[4] = { '^','v', '<', '>' };
-    int x, y, max_x, max_y;
+    int prev_x, prev_y, max_x, max_y;
     Direction dir;
     char displayChar;
 
+
 public:
+    int x, y;
+    Snake *head, *last;
     Player(int p_x, int p_y, int max_x, int max_y);
     void update(int* input);
+    void addSnakePart();
     char getDisplayChar() { return displayChar; };
     int getX() { return x; };
     int getY() { return y; };
-
 };
 

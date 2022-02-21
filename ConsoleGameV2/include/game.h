@@ -5,7 +5,7 @@
 #include <iostream>
 #include "player.h"
 
-constexpr int LENGTH = 20;
+constexpr int LENGTH = 10;
 constexpr int HEIGHT = 10;
 
 enum Color {
@@ -19,18 +19,26 @@ constexpr WORD colors[4] = {
     Color::BLUE
 };
 
-void clearScreen();
+
+void resetCaretPos();
 void hideCursor(HANDLE& handle);
 
 class Game
 {
     std::string consoleOutput;
     HANDLE handle;
-    int colorIndex, renderTicks;
+    int colorIndex, renderTicks, updateTicks;
     Player* player;
     int* input;
 
+    void initialize();
+
+    void restart();
+
+    bool usedPositions[LENGTH * HEIGHT] = {false};
+
 public:
+    
     Game(HANDLE& p_handle, int* p_input);
     void update();
 

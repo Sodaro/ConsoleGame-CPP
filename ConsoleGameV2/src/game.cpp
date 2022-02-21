@@ -1,8 +1,9 @@
 #pragma once
 #include "game.h"
 
-void clearScreen()
+void resetCaretPos()
 {
+    //move the caret to the beginning, so that when we write it will overwrite the existing output
     COORD cursorPosition;
     cursorPosition.X = 0;
     cursorPosition.Y = 0;
@@ -23,29 +24,77 @@ void hideCursor(HANDLE& handle)
 Game::Game(HANDLE& p_handle, int* p_input)
 {
     handle = p_handle;
-    consoleOutput = std::string(LENGTH * HEIGHT, '.');
-
-    player = new Player(2, 5, LENGTH - 1, HEIGHT - 1);
     input = p_input;
-    renderTicks = colorIndex = 0;
-
+    initialize();
 }
 
 void Game::update()
 {
-    int oldX, oldY;
-    oldX = player->getX();
-    oldY = player->getY();
+    if (player == nullptr)
+        return;
 
-    player->update(input);
-
+    int oldX, oldY, newX, newY;
+    Snake* last = player->last;
+    
+    if (last != nullptr)
+    {
+        oldX = last->getX();
+        oldY = last->getY();
+    }
+    else
+    {
+        oldX = player->getX();
+        oldY = player->getY();
+    }
+    usedPositions[oldY * LENGTH + oldX] = false;
     consoleOutput[oldY * LENGTH + oldX] = '.';
-    consoleOutput[player->getY() * LENGTH + player->getX()] = player->getDisplayChar();
+    
+    player->update(input);
+    newX = player->getX();
+    newY = player->getY();
+
+    int index = newY * LENGTH + newX;
+    for (int i = 0; i < sizeof(usedPositions) / sizeof(bool); i++)
+    {
+        if (usedPositions[i] == false)
+            continue;
+
+        if (index == i)
+        {
+            restart();
+            return;
+        }
+    }
+
+    consoleOutput[index] = player->getDisplayChar();
+    usedPositions[index] = true;
+
+
+    Snake* head = player->head;
+    if (head != nullptr)
+    {
+        Snake* part = head;
+        while (part != nullptr)
+        {
+            newX = part->getX();
+            newY = part->getY();
+            usedPositions[newY * LENGTH + newX] = true;
+            consoleOutput[newY * LENGTH + newX] = 'o';
+            part = part->getNext();
+        }
+    }
+
+
+    updateTicks++;
+    if (updateTicks % 10 == 0)
+    {
+        player->addSnakePart();
+    }
 }
 
 void Game::render()
 {
-    clearScreen();
+    resetCaretPos();
 
     //write the output to console
     for (int i = 0; i < HEIGHT; i++)
@@ -65,4 +114,37 @@ void Game::render()
         colorIndex %= 4;
         SetConsoleTextAttribute(handle, colors[colorIndex]);
     }
+}
+
+void Game::restart()
+{
+    Snake* current = player->head;
+    Snake* next = NULL;
+
+    while (current != NULL)
+    {
+        next = current->next;
+        delete current;
+        current = next;
+    }
+
+    for (int i = 0; i < sizeof(usedPositions) / sizeof(bool); i++)
+    {
+        usedPositions[i] = false;
+    }
+    delete player;
+    player = nullptr;
+    initialize();
+}
+
+void Game::initialize()
+{
+    consoleOutput = std::string(LENGTH * HEIGHT, '.');
+
+    player = new Player(0, 0, LENGTH - 1, HEIGHT - 1);
+
+    renderTicks = colorIndex = 0;
+
+    resetCaretPos();
+    hideCursor(handle);
 }
