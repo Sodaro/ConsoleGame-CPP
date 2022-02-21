@@ -18,10 +18,6 @@ Snake::Snake(int x, int y)
     this->prev_y = y;
 }
 
-void Snake::setNext(Snake* next)
-{
-    this->next = next;
-}
 
 void Snake::setPosition(int x, int y)
 {

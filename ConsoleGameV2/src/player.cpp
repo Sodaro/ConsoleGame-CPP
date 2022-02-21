@@ -95,7 +95,7 @@ void Player::addSnakePart()
             lastX = last->prev_x;
             lastY = last->prev_y;
             
-            last->setNext(newPart);
+            last->next = newPart;
             last = newPart;
         }
         last->setPosition(lastX, lastY);

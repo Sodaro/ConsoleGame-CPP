@@ -80,7 +80,7 @@ void Game::update()
             newY = part->y;
             usedPositions[newY * LENGTH + newX] = true;
             consoleOutput[newY * LENGTH + newX] = 'o';
-            part = part->getNext();
+            part = part->next;
         }
     }
 
